@@ -112,7 +112,6 @@ async def response_captcha(responses: List[List[str]]) -> bool:
             config.database.find_update_upsert(config.database.collection3, response[0], response[1])
         return True
 
-'''
 
 class RequestedData(BaseModel):
     name: str
@@ -190,5 +189,3 @@ def add_requested_data(data: RequestedData):
         info_logger.info(f"data added successfully with id -> {id.inserted_id}")
     except errors.PyMongoError as e:
         error_logger.error(f"An error occurred: {e}")
-
-'''
