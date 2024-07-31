@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Form
 import logging
 import base64
 import config.text_to_img
@@ -8,21 +8,11 @@ import schemas.schema
 from bson import ObjectId
 import random
 from typing import List, Dict
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
+
 
 router = APIRouter()
 
-'''
-@router.get('/captcha/request_captcha')
-async def request_captcha():
-    req=[]
-    docs=config.database.fetch_random_document(config.database.collection1)
-    for doc in docs:
-        d=schemas.schema.individual_serialise_1(doc)
-        req.append(d)
-        req.append(config.text_to_img.get_random_image("/home/magellan/envs/vericaptcha_prototype_mongodb/project_files/data/BPtypewriteStrikethrough.ttf", d['sentence']))
-    return req
-'''
 
 @router.get('/captcha/request_captcha/{imgs_num}', response_model=List[models.model_1.captcha])
 async def request_captcha(imgs_num:int)->List[Dict[str,str]]:
@@ -102,3 +92,27 @@ async def response_captcha(responses:List[List[str]])->bool:
         for response in responses:
             config.database.find_update_upsert(config.database.collection3,response[0],response[1])
         return True
+
+@router.get("/")
+def home():
+    return {"message": "received"}
+
+
+@router.post("/submit_request")
+def submit_request(
+        name: str = Form(...),
+        address: str = Form(...),
+        email: EmailStr = Form(...),
+        phone: str = Form(...),
+        request_detail: str = Form(...),
+):
+    data = {
+        "name": name,
+        "address": address,
+        "email": email,
+        "phone": phone,
+        "description": request_detail,
+    }
+    config.database.add_requested_data(data)
+    config.database.send_email(data)
+    return {"message": "order successfully received"}
