@@ -1,14 +1,20 @@
 from pydantic import BaseModel
 
-class Coll_1(BaseModel):
+class captcha(BaseModel):
     id: str
     sentence: str
     label: int
+    image: str
 
-class Coll_2(BaseModel):
+class labels(BaseModel):
     label_class: str
 
 class Coll_3(BaseModel):
     response_text: str
     id: str
     label: int
+
+class responses(BaseModel):
+        sentence_id:str
+        response_text:str
+    

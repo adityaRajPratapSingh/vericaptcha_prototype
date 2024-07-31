@@ -11,7 +11,7 @@ def get_random_image(font_path: str, text:str):
         return None
 
 
-def generate_image(text: str, font_path: str, font_size=50):
+def generate_image(text: str, font_path: str, font_size:int=50):
     width, height = calculate_image_size(text, font_size, font_path)
     image = Image.new("RGB", (width, height), 'white')
     draw = ImageDraw.Draw(image)
@@ -28,7 +28,7 @@ def generate_image(text: str, font_path: str, font_size=50):
     return img_byte_arr.read()
 
 
-def calculate_image_size(text, font_size, font_path):
+def calculate_image_size(text:str, font_size: int, font_path:str):
     font = ImageFont.truetype(font_path, font_size)
     text_width = int(font.getlength(text))
     # Add some padding to avoid text getting too close to edges
