@@ -1,7 +1,7 @@
 __pycache__/
 mongo_creds.py
 *.pyc
-data/modified_L.csv:Zone.Identifier
-data/text.csv:Zone.Identifier
-data/orignal_text_csv.csv
-data/modified_text_csv.csv
+/data/modified_L.csv:Zone.Identifier
+/data/text.csv:Zone.Identifier
+/data/orignal_text_csv.csv
+/data/modified_text_csv.csv
