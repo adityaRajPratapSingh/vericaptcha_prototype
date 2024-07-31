@@ -33,22 +33,19 @@ async def request_captcha() -> List[Dict[str, str]]:
     req = []
     try:
         docs = config.database.fetch_random_document(config.database.collection1)
-        logging.error(docs)
     except Exception as e:
         logging.error(f"Error fetching documents: {e}")
         raise HTTPException(status_code=500, detail="Error fetching documents from the database")
 
     for doc in docs:
         try:
-            logging.error(doc)
             d = schemas.schema.individual_serialise_1(doc)
-            logging.error(d)
-            # image_bytes = config.text_to_img.get_random_image(
-            #     "../data/BPtypewriteStrikethrough.ttf",
-            #     d['sentence']
-            # )
-            # image_base64 = base64.b64encode(image_bytes).decode('utf-8')
-            # d['image'] = image_base64
+            image_bytes = config.text_to_img.get_random_image(
+                "../data/BPtypewriteStrikethrough.ttf",
+                d['sentence']
+            )
+            image_base64 = base64.b64encode(image_bytes).decode('utf-8')
+            d['image'] = image_base64
             req.append(d)
         except UnicodeDecodeError as e:
             logging.error(f"UnicodeDecodeError: {e} - Document: {doc}")
@@ -112,7 +109,7 @@ async def response_captcha(responses: List[List[str]]) -> bool:
             config.database.find_update_upsert(config.database.collection3, response[0], response[1])
         return True
 
-
+'''
 class RequestedData(BaseModel):
     name: str
     email: EmailStr
@@ -189,3 +186,4 @@ def add_requested_data(data: RequestedData):
         info_logger.info(f"data added successfully with id -> {id.inserted_id}")
     except errors.PyMongoError as e:
         error_logger.error(f"An error occurred: {e}")
+'''
