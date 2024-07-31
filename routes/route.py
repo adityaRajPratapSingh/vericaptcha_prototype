@@ -15,7 +15,7 @@ router = APIRouter()
 
 @router.get("/")
 async def home():
-    return {"message": "received"}
+    return {"message":"received"}
 
 @router.get('/captcha/request_captcha/{imgs_num}', response_model=List[models.model_1.captcha])
 async def request_captcha(imgs_num:int)->List[Dict[str,str]]:
@@ -30,7 +30,7 @@ async def request_captcha(imgs_num:int)->List[Dict[str,str]]:
         try:
             d = schemas.schema.individual_serialise_1(doc)
             image_bytes = config.text_to_img.get_random_image(
-                "/home/magellan/envs/vericaptcha_prototype_mongodb/project_files/data/BPtypewriteStrikethrough.ttf",
+                "./BPtypewriteStrikethrough.ttf",
                 d['sentence']
             )
             image_base64 = base64.b64encode(image_bytes).decode('utf-8')
