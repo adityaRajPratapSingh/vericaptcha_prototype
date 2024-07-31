@@ -13,6 +13,9 @@ from pydantic import BaseModel, EmailStr
 
 router = APIRouter()
 
+@router.get("/")
+async def home():
+    return {"message": "received"}
 
 @router.get('/captcha/request_captcha/{imgs_num}', response_model=List[models.model_1.captcha])
 async def request_captcha(imgs_num:int)->List[Dict[str,str]]:
@@ -93,13 +96,8 @@ async def response_captcha(responses:List[List[str]])->bool:
             config.database.find_update_upsert(config.database.collection3,response[0],response[1])
         return True
 
-@router.get("/")
-def home():
-    return {"message": "received"}
-
-
 @router.post("/submit_request")
-def submit_request(
+async def submit_request(
         name: str = Form(...),
         address: str = Form(...),
         email: EmailStr = Form(...),
