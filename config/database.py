@@ -99,8 +99,8 @@ def send_email(data: models.model_1.RequestedData):
     s.starttls()
     s.login("vericaptcha@gmail.com", "kztc ebqp imkk jyll")
     subject = "Custom Dataset Request Received"
-    body = """
-    Hey there,
+    body = f"""
+    Hey {data['name']},
 
     We hope this message finds you well.
 
