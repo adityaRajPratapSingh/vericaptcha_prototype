@@ -24,11 +24,11 @@ async def request_captcha():
     return req
 '''
 
-@router.get('/captcha/request_captcha', response_model=List[models.model_1.captcha])
-async def request_captcha()->List[Dict[str,str]]:
+@router.get('/captcha/request_captcha/{imgs_num}', response_model=List[models.model_1.captcha])
+async def request_captcha(imgs_num:int)->List[Dict[str,str]]:
     req = []
     try:
-        docs = config.database.fetch_random_document(config.database.collection1)
+        docs = config.database.fetch_random_document(config.database.collection1, imgs_num)
     except Exception as e:
         logging.error(f"Error fetching documents: {e}")
         raise HTTPException(status_code=500, detail="Error fetching documents from the database")

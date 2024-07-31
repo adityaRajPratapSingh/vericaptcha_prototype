@@ -8,6 +8,8 @@ import random
 from bson import ObjectId
 from datetime import datetime
 from typing import List, Dict
+import schemas
+import schemas.schema
 
 # uri for the prototype Cluster0
 uri = f"mongodb+srv://{quote_plus(mongo_creds.creds.USER)}:{quote_plus(mongo_creds.creds.PASS)}@cluster0.4cy2ale.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
@@ -24,7 +26,7 @@ collection1='sentence_w_label'
 collection2='label_classes'
 collection3='vericaptcha_output'
 
-def fetch_random_document(collection_name:str)->List[Dict[str,str]]:
+def fetch_random_document(collection_name:str, imgs_num:int)->List[Dict[str,str]]:
     try:
         coll=db[collection_name]
     except Exception as e:
@@ -32,8 +34,13 @@ def fetch_random_document(collection_name:str)->List[Dict[str,str]]:
     count = coll.count_documents({})
     if count !=0:
         random_index=random.randint(0, count-1)
-        random_doc_cursor=coll.find().skip(random_index).limit(3)
+        random_doc_cursor=coll.find().skip(random_index).limit(imgs_num)
         random_doc_list=list(random_doc_cursor)
+
+        for doc in random_doc_list:
+            serialised_doc=schemas.schema.individual_serialise_1(doc)
+            if len(serialised_doc['sentence'])>125:
+                return fetch_random_document(collection_name, imgs_num)
         return random_doc_list
     else:
         raise HTTPException(status_code=500, detail="there are no documents in the fetch location")
