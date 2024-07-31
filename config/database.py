@@ -53,8 +53,8 @@ def fetch_label_classes(collection_name:str)->List[str]:
     count = coll.count_documents({})
     if count!=0:
         docs_cursor=coll.find()
-        docs=list(docs_cursor)
-        return docs
+        docs_list=list(docs_cursor)
+        return docs_list
     else:
         raise HTTPException(status_code=500, detail="there are no documents in the fetch location")
     

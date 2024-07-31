@@ -52,7 +52,7 @@ async def request_captcha(imgs_num:int)->List[Dict[str,str]]:
 
     return req
 
-@router.get('/captcha/request_label_classes', response_model=List[models.model_1.labels])
+@router.get('/captcha/request_label_classes')
 async def request_label_classes()->List[str]:
     try:
         docs = config.database.fetch_label_classes(config.database.collection2)
