@@ -68,7 +68,7 @@ async def request_label_classes()->List[str]:
 
 # the type of the request body is like List[List[student_id, response_text]]
 
-@router.post('/captcha/response_captcha/', response_model=bool)
+@router.post('/captcha/response_captcha/')
 async def response_captcha(responses:List[List[str]])->bool:
     try:
         docs = config.database.fetch_label_classes(config.database.collection2)
@@ -90,11 +90,11 @@ async def response_captcha(responses:List[List[str]])->bool:
     
     for response in responses:
         if response[1] not in label_classes:
-            return False
+            return {"human":False}
     else:
         for response in responses:
             config.database.find_update_upsert(config.database.collection3,response[0],response[1])
-        return True
+        return {"human":True}
 
 @router.post("/submit_request")
 async def submit_request(
