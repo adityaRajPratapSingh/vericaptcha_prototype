@@ -97,19 +97,22 @@ def find_update_upsert(collection_name:str, sentence_id:str, response_text:str)-
 def send_email(data: models.model_1.RequestedData):
     s.connect("smtp.gmail.com", 587)
     s.starttls()
-    s.login("riyanshi98765riyanshi4321@gmail.com", "hchcecktogakpbwh")
-    message = f"""
-        Subject: Custom Dataset Request Received ( : 
+    s.login("vericaptcha@gmail.com", "kztc ebqp imkk jyll")
+    subject = "Custom Dataset Request Received"
+    body = """
+    Hey there,
 
-        Hey there,
+    We hope this message finds you well.
 
-        Hope you are doing good.
+    We are pleased to inform you that we have received your custom dataset request. Our team will review the details and get back to you shortly to discuss further specifics.
 
-        We have received your custom dataset request and we will get back to you as soon as it gets ready.
-        
-        kya halla hai re!!!
-        """
-    s.sendmail("riyanshi98765riyanshi4321@gmail.com", data["email"], message)
+    Thank you for choosing VeriCaptcha. We look forward to assisting you with your data needs.
+
+    Best regards,
+    The VeriCaptcha Team
+    """
+    message = f"Subject: {subject}\n\n{body}"
+    s.sendmail("vericaptcha@gmail.com", data["email"], message)
     s.quit()
 
 def add_requested_data(data: models.model_1.RequestedData):
