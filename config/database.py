@@ -2,6 +2,8 @@
 from fastapi import HTTPException
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
+from pymongo import errors
+import models.model_1
 import mongo_creds
 from urllib.parse import quote_plus
 import random
@@ -10,6 +12,8 @@ from datetime import datetime
 from typing import List, Dict
 import schemas
 import schemas.schema
+import smtplib
+import models
 
 # uri for the prototype Cluster0
 uri = f"mongodb+srv://{quote_plus(mongo_creds.creds.USER)}:{quote_plus(mongo_creds.creds.PASS)}@cluster0.4cy2ale.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
@@ -17,6 +21,7 @@ uri = f"mongodb+srv://{quote_plus(mongo_creds.creds.USER)}:{quote_plus(mongo_cre
 
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
+s = smtplib.SMTP("smtp.gmail.com", 587)
 
 # connect to the prototype databse in Cluster0
 db=client['sentence_captcha']
@@ -25,6 +30,7 @@ db=client['sentence_captcha']
 collection1='sentence_w_label'
 collection2='label_classes'
 collection3='vericaptcha_output'
+collection4='user_request_data'
 
 def fetch_random_document(collection_name:str, imgs_num:int)->List[Dict[str,str]]:
     try:
@@ -39,7 +45,7 @@ def fetch_random_document(collection_name:str, imgs_num:int)->List[Dict[str,str]
 
         for doc in random_doc_list:
             serialised_doc=schemas.schema.individual_serialise_1(doc)
-            if len(serialised_doc['sentence'])>125:
+            if len(serialised_doc['sentence'])>175:
                 return fetch_random_document(collection_name, imgs_num)
         return random_doc_list
     else:
@@ -86,3 +92,29 @@ def find_update_upsert(collection_name:str, sentence_id:str, response_text:str)-
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=e)
+    
+
+def send_email(data: models.model_1.RequestedData):
+    s.connect("smtp.gmail.com", 587)
+    s.starttls()
+    s.login("riyanshi98765riyanshi4321@gmail.com", "hchcecktogakpbwh")
+    message = f"""
+        Subject: Custom Dataset Request Received ( : 
+
+        Hey there,
+
+        Hope you are doing good.
+
+        We have received your custom dataset request and we will get back to you as soon as it gets ready.
+        
+        kya halla hai re!!!
+        """
+    s.sendmail("riyanshi98765riyanshi4321@gmail.com", data["email"], message)
+    s.quit()
+
+def add_requested_data(data: models.model_1.RequestedData):
+    try:
+        collection = db[collection4]
+        id = collection.insert_one(data)
+    except errors.PyMongoError as e:
+        raise Exception(f'{e}')

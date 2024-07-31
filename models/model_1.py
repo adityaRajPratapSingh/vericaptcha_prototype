@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 class captcha(BaseModel):
     id: str
@@ -18,3 +18,8 @@ class responses(BaseModel):
         sentence_id:str
         response_text:str
     
+class RequestedData(BaseModel):
+    name: str
+    email: EmailStr
+    requested_detail: str
+    phone_no: int
