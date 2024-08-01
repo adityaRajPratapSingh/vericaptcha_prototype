@@ -69,7 +69,7 @@ async def request_label_classes()->List[str]:
 # the type of the request body is like List[List[student_id, response_text]]
 
 @router.post('/captcha/response_captcha/')
-async def response_captcha(responses:List[List[str]])->bool:
+async def response_captcha(responses:List[List[str]]):
     try:
         docs = config.database.fetch_label_classes(config.database.collection2)
     except Exception as e:
