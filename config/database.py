@@ -4,7 +4,7 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from pymongo import errors
 import models.model_1
-#import mongo_creds
+import mongo_creds
 from urllib.parse import quote_plus
 import random
 from bson import ObjectId
@@ -15,12 +15,9 @@ import schemas.schema
 import smtplib
 import models
 
-class creds:
-    USER='magellan2409'
-    PASS='nbLXCg85zqToP3t7'
 
 # uri for the prototype Cluster0
-uri = f"mongodb+srv://{quote_plus(creds.USER)}:{quote_plus(creds.PASS)}@cluster0.4cy2ale.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+uri = f"mongodb+srv://{quote_plus(mongo_creds.creds.USER)}:{quote_plus(mongo_creds.creds.PASS)}@cluster0.4cy2ale.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
 
 # Create a new client and connect to the server
